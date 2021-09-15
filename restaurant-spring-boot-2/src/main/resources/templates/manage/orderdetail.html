@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="css/bootstrap.css" rel="stylesheet">
+<base href="/">
+<link rel="stylesheet" type="text/css" href="/css/BackEnd.css" />
+<link href="css/bootstrap.css" rel="stylesheet">
+<!-- Our Custom CSS -->
+<link rel="stylesheet" href="style4.css">
+<link rel="stylesheet" href="css/bootstrap-select.min.css">
+
+<title>後台系統</title>
+<style type="text/css">
+</style>
+
+</head>
+<body>
+
+	<div class="sidenav">
+		<a class="logo" href="/manage/back.page" style="height:80px; font-size:30px;
+		 margin-top:20px; padding-left:40px; border-bottom:1px solid;">後台系統</a>
+
+		<li><a href="/manage/product.page">餐點管理</a></li>
+		<li class="active"><a href="/manage/order.page">訂單管理</a></li>
+		<button class="dropdown-btn">
+			銷量分析 <i class="fa fa-caret-down"></i>
+		</button>
+		<div class="dropdown-container">
+			<li><a href="/manage/sales.page">網路訂餐</a></li>
+			<li><a href="/manage/delivery.page">外送訂餐</a></li>
+		</div>
+		<li><a href="/manage/Preferential.page">優惠管理</a></li>
+	</div>
+
+	<div class="main">
+		<div
+			style="width: 60%; padding-top: 20px; border-bottom-style: solid; border-bottom-width: 20%; margin: auto;">
+			<center>
+				<h2>訂單明細</h2>
+			</center>
+		</div>
+		<center>
+			<br>
+			<div class="col md-12 mb">
+				<a class="btn btn-outline-secondary back" href="javascript:history.go(-1)"
+					style="font-weight: bold; float: left; margin-left: 140px;"><i
+					class="fa fa-arrow-left"></i>&nbsp;返回</a>
+			</div>
+			<div class="col md-12" style="margin-bottom: 12px; width: 63%;">
+				<div class="card"
+					style="width: auto; height: auto; padding-top: 16px;">
+
+					<table class="table table-borderless">
+						<thead>
+							<tr th:each="order : ${orders}" th:if="${id == order.orderno}">
+								<th>會員名稱: [[${order.orderuser}]]</th>
+								<th>訂單日期: [[${order.date}]]</th>
+							</tr>
+							<tr th:each="order : ${orders}" th:if="${id == order.orderno}">
+								<th>電話: [[${order.orderphone}]]</th>
+								<th>地址: [[${order.orderadd}]]</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
+
+			<div class="col md-12">
+				<div class="card" style="width: 800px">
+
+					<table class="table ">
+
+						<thead>
+							<tr>
+								<th>餐點名稱</th>
+								<th>數量</th>
+								<th>單價</th>
+
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="orderdetail : ${orderdetails}"
+								th:if="${id == orderdetail.orderno1}">
+								<td>[[${orderdetail.foodname}]]</td>
+								<td>[[${orderdetail.foodcount}]]</td>
+								<td>[[${orderdetail.foodmoney}]]</td>
+							</tr>
+						</tbody>
+					</table>
+					<hr>
+					<div class="ml-auto" style="margin-right: 140px;">
+
+
+
+						<tr th:each="order : ${orders}" th:if="${id == order.orderno}">
+
+							<div class="column cart-button"
+								style="float: left; margin-right: 100px;"
+								th:if="${order.ordered =='未取餐'}">
+								<form action="updatebuyway" method="post">
+									<input type="hidden" name="buyway" value="已取餐"> <input
+										type="hidden" name="id" th:value="${id}">
+									<button class="btn checkout btn-success" type="submit"
+										style="width: 100px; font-size: 18px;">已取餐</button>
+									<i th:value="${orders}"></i>
+								</form>
+							</div>
+						</tr>
+
+						<tr th:each="order : ${orders}" th:if="${id == order.orderno}"
+							style="text-align: right;">
+							<b>總金額: <span class="text-medium">$[[${order.ordermoney}]]</span></b>
+						</tr>
+
+
+
+					</div>
+					<div class="card-body"></div>
+				</div>
+		</center>
+	</div>
+
+	</center>
+	</div>
+
+	<!-- Bootstrap JS & jQuery -->
+	<script src="js/jquery-3.1.1.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
+		integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
+		crossorigin="anonymous"></script>
+	<script src="js/bootstrap.js"></script>
+	<script type="text/javascript" src="js/bootstrap-select.min.js"></script>
+
+	<script type="text/javascript">
+		var dropdown = document.getElementsByClassName("dropdown-btn");
+		var i;
+
+		for (i = 0; i < dropdown.length; i++) {
+			dropdown[i].addEventListener("click", function() {
+				this.classList.toggle("active");
+				var dropdownContent = this.nextElementSibling;
+				if (dropdownContent.style.display === "block") {
+					dropdownContent.style.display = "none";
+				} else {
+					dropdownContent.style.display = "block";
+				}
+			});
+		}
+	</script>
+</body>
+</html>

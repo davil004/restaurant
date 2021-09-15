@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../css/BackEnd.css" />
+
+<!-- Bootstrap CSS  & FontAwsome-->
+<base href="/">
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="font-awesome/css1/all.css" rel="stylesheet">
+<link rel="icon" href="images/icon.png" />
+<!-- Our Custom CSS -->
+<link rel="stylesheet" href="css/style4.css">
+<link rel="stylesheet" href="css/bootstrap-select.min.css">
+<title>後台系統</title>
+
+<script type="text/javascript">
+	function clearForm() {
+		var inputs = document.getElementsByTagName("input");
+		for (var i = 0; i < inputs.length; i++) {
+			if (inputs[i].type == "text") {
+				inputs[i].value = "";
+			}
+		}
+	}
+</script>
+</head>
+<body>
+	
+	<div class="wrapper">
+		<!-- Sidebar  -->
+		
+		<nav th:fragment="sidebar" id="sidebar">
+			<div class="sidenav">
+		<a class="logo" href="/manage/back.page" style="height:80px; font-size:30px;
+		 margin-top:20px; margin-bottom:20px; padding-left:40px; border-bottom:1px solid;">後台系統</a>
+		
+				<li class="active"><a href="/manage/product.page">餐點管理</a></li>
+				<li><a href="/manage/order.page">訂單管理</a></li>
+				<button class="dropdown-btn">
+					銷量分析 <i class="fa fa-caret-down"></i>
+				</button>
+				<div class="dropdown-container">
+					<li><a href="/manage/sales.page">網路訂餐</a></li>
+					<li><a href="/manage/delivery.page">外送訂餐</a></li>
+				</div>
+				<li><a href="/manage/Preferential.page">優惠管理</a></li>
+			</div>
+		</nav>
+
+	
+		<!-- Page Content  -->
+		<div id="content">
+			<nav th:fragment="sidebar"
+				class="navbar navbar-expand-lg navbar-light"
+				style="border-bottom: 4px solid #7386D5;">
+				<div class="container-fluid">
+					<div class="collapse navbar-collapse" id="navbarSupportedContent">
+						<ul class="nav navbar-nav ml-auto">
+							
+							<li class="nav-item"><a class="nav-link btn btn-light mr-2" th:href="@{/manage/product.page}"
+								>餐點管理</a></li>
+							<li class="nav-item "><a 
+								class="nav-link btn btn-light mr-2" th:href="@{/pages/pcrud.page}">新增餐點</a></li>
+							<li class="nav-item active"><a onclick=" handleListProduct(event);"
+							class="nav-link btn btn-light mr-2" href="#">餐點折扣</a></li>			
+						
+								
+						</ul>
+					</div>
+				</div>
+			</nav>
+			<div class="line"></div>
+			<div class="container" id="app">
+				<!-- Default form subscription -->
+				<div class="card">
+					<div class="card-header">
+
+						<div class="tab">
+							<button class="tablinks" onclick="openTab(event, 'coupon')"
+								id="defaultOpen">主菜</button>
+							<button class="tablinks" onclick="openTab(event, 'coupon2')">義大利麵/燉飯</button>
+							<button class="tablinks" onclick="openTab(event, 'coupon3')">pizza</button>
+							<button class="tablinks" onclick="openTab(event, 'coupon4')">沙拉/濃湯</button>
+							<button class="tablinks" onclick="openTab(event, 'coupon5')">單點</button>
+						</div>
+					</div>
+					<div class="card-body">
+
+						
+						<div id="coupon" class="tabcontent">
+							<h5 class="text-center">主菜 &nbsp;&nbsp;折扣</h5>
+							<hr><br>
+							<form action="/Admin/addDiscountToP" method="POST">
+							  <div class="form-group">
+							   <select name="product_id" class="form-control" >
+							    <option th:each="product : ${products}" th:value="${product.id}">[[${product.name}]] &nbsp; 折扣: [[${product.discount.discount}]]%</option>
+							   </select>
+							  </div>
+							  
+                              <div class="form-group">
+							  <input type="number" class="form-control"  name="discount" min="0" max="75" />
+							  </div>
+							  <div class="form-group">
+							  <button class="btn btn-info btn-block" type="submit">修改</button>
+							  </div>
+							</form>
+						</div>
+						
+						<div id="coupon2" class="tabcontent">
+							<h5 class="text-center">義大利麵/燉飯 &nbsp;&nbsp;折扣</h5>
+							<hr><br>
+							<form action="/Admin/addDiscountToP" method="POST">
+							  <div class="form-group">
+							   <select name="product_id" class="form-control" >
+							    <option th:each="product : ${products2}" th:value="${product.id}">[[${product.name}]] &nbsp; 折扣: [[${product.discount.discount}]]%</option>
+							   </select>
+							  </div>
+							  
+                              <div class="form-group">
+							  <input type="number" class="form-control"  name="discount" min="0" max="75" />
+							  </div>
+							  <div class="form-group">
+							  <button class="btn btn-info btn-block" type="submit">修改</button>
+							  </div>
+							</form>
+						</div>
+						
+						<div id="coupon3" class="tabcontent">
+							<h5 class="text-center">pizza &nbsp;&nbsp;折扣</h5>
+							<hr><br>
+							<form action="/Admin/addDiscountToP" method="POST">
+							  <div class="form-group">
+							   <select name="product_id" class="form-control" >
+							    <option th:each="product : ${products3}" th:value="${product.id}">[[${product.name}]] &nbsp; 折扣: [[${product.discount.discount}]]%</option>
+							   </select>
+							  </div>
+							  
+                              <div class="form-group">
+							  <input type="number" class="form-control"  name="discount" min="0" max="75" />
+							  </div>
+							  <div class="form-group">
+							  <button class="btn btn-info btn-block" type="submit">修改</button>
+							  </div>
+							</form>
+						</div>
+						
+						<div id="coupon4" class="tabcontent">
+							<h5 class="text-center">沙拉/濃湯 &nbsp;&nbsp;折扣</h5>
+							<hr><br>
+							<form action="/Admin/addDiscountToP" method="POST">
+							  <div class="form-group">
+							   <select name="product_id" class="form-control" >
+							    <option th:each="product : ${products4}" th:value="${product.id}">[[${product.name}]] &nbsp; 折扣: [[${product.discount.discount}]]%</option>
+							   </select>
+							  </div>
+							  
+                              <div class="form-group">
+							  <input type="number" class="form-control"  name="discount" min="0" max="75" />
+							  </div>
+							  <div class="form-group">
+							  <button class="btn btn-info btn-block" type="submit">修改</button>
+							  </div>
+							</form>
+						</div>
+						
+						<div id="coupon5" class="tabcontent">
+							<h5 class="text-center">單點 &nbsp;&nbsp;折扣</h5>
+							<hr><br>
+							<form action="/Admin/addDiscountToP" method="POST">
+							  <div class="form-group">
+							   <select name="product_id" class="form-control" >
+							    <option th:each="product : ${products5}" th:value="${product.id}">[[${product.name}]] &nbsp; 折扣: [[${product.discount.discount}]]%</option>
+							   </select>
+							  </div>
+							  
+                              <div class="form-group">
+							  <input type="number" class="form-control"  name="discount" min="0" max="75" />
+							  </div>
+							  <div class="form-group">
+							  <button class="btn btn-info btn-block" type="submit">修改</button>
+							  </div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<!-- Default form subscription -->
+
+
+			</div>
+			<div class="line"></div>
+		</div>
+	</div>
+<div class="main"></div>
+	<!-- Bootstrap JS & jQuery -->
+	<script src="js/jquery-3.1.1.min.js"></script>
+    <script
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
+		integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
+		crossorigin="anonymous"></script>
+	<script src="js/bootstrap.js"></script>
+	<script type="text/javascript" src="js/bootstrap-select.min.js"></script>
+	<!-- Popper.JS -->
+	<script type="text/javascript" src="font-awesome/js1/fontawesome.js"></script>
+	<script type="text/javascript" src="api/ajaxFetch.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			
+			$('#sidebarCollapse').on('click', function() {
+				$('#sidebar').toggleClass('active');
+			});
+			
+			$(".chosen-select").chosen({
+				  no_results_text: "Oops, nothing found!"
+				})
+			// To style all selects
+		  $('select').selectpicker();
+		});
+	
+		
+	</script>
+	<script type="text/javascript">
+		var dropdown = document.getElementsByClassName("dropdown-btn");
+		var i;
+		 
+		for (i = 0; i < dropdown.length; i++) {
+			dropdown[i].addEventListener("click", function() {
+				this.classList.toggle("active");
+				var dropdownContent = this.nextElementSibling;
+				if (dropdownContent.style.display === "block") {
+					dropdownContent.style.display = "none";
+				} else {
+					dropdownContent.style.display = "block";
+				}
+			});
+		}
+		
+	</script>
+	
+	<script>
+		function openTab(evt, Name) {
+			var i, tabcontent, tablinks;
+			tabcontent = document.getElementsByClassName("tabcontent");
+			for (i = 0; i < tabcontent.length; i++) {
+				tabcontent[i].style.display = "none";
+			}
+			tablinks = document.getElementsByClassName("tablinks");
+			for (i = 0; i < tablinks.length; i++) {
+				tablinks[i].className = tablinks[i].className.replace(
+						" active", "");
+			}
+			document.getElementById(Name).style.display = "block";
+			evt.currentTarget.className += " active";
+		}
+
+		// Get the element with id="defaultOpen" and click on it
+		document.getElementById("defaultOpen").click();
+	</script>
+
+	<script type="text/javascript">
+	$(function (){
+		 //圖檔預覽
+	    function format_float(num, pos)
+	    {
+	        var size = Math.pow(10, pos);
+	        return Math.round(num * size) / size;
+	    }
+	 
+	    function preview(input) {
+	 
+	        if (input.files && input.files[0]) {
+	            var reader = new FileReader();
+	            
+	            reader.onload = function (e) {
+	                $('.preview').attr('src', e.target.result);
+	                var KB = format_float(e.total / 1024, 2);
+	                $('.size').text("檔案大小：" + KB + " KB");         
+	            }
+	 
+	            reader.readAsDataURL(input.files[0]);
+	        }
+	    }
+	 
+	    $("body").on("change", ".upl", function (){
+	        preview(this);
+	    })
+	    
+	})
+	</script>
+	
+<script language="JavaScript" type="text/javascript">
+		var fileSize = g.size; //檔案大小
+		var SizeLimit = 1024;  //上傳上限，單位:byte
+		
+		function checkFile() {
+			
+			var f = document.getElementById("customFile1");
+			var g = document.getElementById("customFile1").files[0];
+			var fileSize = g.size; //檔案大小
+			
+
+        //FOR IE
+     
+            var img = new Image();
+            img.onload = checkSize;
+            img.src = f.value;
+          
+               if (img.src != 'http://localhost:8080/') {
+ 				
+            	if(fileSize > 1024000){	
+            	alert("圖片檔案超過 1024KB 無法新增!");	
+            	checkSize();
+            	
+ 				}
+       		 }
+            
+    }
+
+function checkFile2() {
+			var f2 = document.getElementById("customFile2");
+			var g2 = document.getElementById("customFile2").files[0];
+			var fileSize2 = g2.size; //檔案大小
+
+        //FOR IE
+     
+            var img = new Image();
+            img.onload = checkSize;
+            img.src2 = f2.value;
+
+               if (img.src2 != 'http://localhost:8080/') {
+    				
+               	if(fileSize2 > 1024000){
+    				
+               	alert("圖片檔案超過 1024KB 無法新增!");
+               	checkSize();
+               	
+    				}
+          		 }
+    }
+    //檢查檔案大小
+    function checkSize() {
+        //FOR IE FIX
+  
+        if (fileSize <= SizeLimit) {
+            fileSize = this.fileSize;
+        }
+
+        if (fileSize > SizeLimit) {
+            Message((fileSize / 1024).toPrecision(4), (SizeLimit / 1024).toPrecision(2));
+        } else {
+            document.FileForm.submit();
+        }
+    }
+
+    function Message(file, limit) {
+        var msg = "您所選擇的檔案大小為 " + file + " kB\n已超過上傳上限 " + limit + " kB\n不允許上傳！"
+        alert(msg);
+    } 
+    $("body").on("change", ".upl", function (){
+    	checkFile(this);
+    })
+</script>
+</body>
+</html>

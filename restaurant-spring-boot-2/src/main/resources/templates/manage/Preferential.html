@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../css/BackEnd.css" />
+<link rel="stylesheet" type="text/css"
+	href="../css/bootstrap-4.4.1-dist/css/bootstrap.min.css" />
+<script type="text/javascript"
+	src="../css/bootstrap-4.4.1-dist/js/bootstrap.bundle.min.js"></script>
+<link href="css/bootstrap.css" rel="stylesheet">
+<base href="/">
+<link href="css/bootstrap.css" rel="stylesheet">
+<!-- Our Custom CSS -->
+<link rel="stylesheet" href="style4.css">
+<script type="text/javascript" src="font-awesome/js1/fontawesome.js"></script>
+<script type="text/javascript" src=""></script>
+<title>後台系統</title>
+<style type="text/css">
+</style>
+
+</head>
+<body>
+
+	<div class="sidenav">
+	<a class="logo" href="/manage/back.page" style="height:80px; font-size:30px;
+		 margin-top:20px; padding-left:40px; border-bottom:1px solid;">後台系統</a>
+
+		<li><a href="/manage/product.page">餐點管理</a></li>
+		<li><a href="/manage/order.page">訂單管理</a></li>
+		<button class="dropdown-btn">
+			銷量分析 <i class="fa fa-caret-down"></i>
+		</button>
+		<div class="dropdown-container">
+			<li><a href="/manage/sales.page">網路訂餐</a></li>
+			<li><a href="/manage/delivery.page">外送訂餐</a></li>
+		</div>
+		<li class="active"><a href="/manage/Preferential.page">優惠管理</a></li>
+	</div>
+
+	<div class="main">
+		<!-- Page Content  -->
+		<nav th:fragment="sidebar"
+			class="navbar navbar-expand-lg navbar-light"
+			style="border-bottom: 4px solid #7386D5; margin-top:40px; margin-left:240px; width:67%;">
+			<div class="container-fluid">
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="nav navbar-nav ml-auto">
+
+						<li class="nav-item active"><a
+							onclick=" handleListProduct(event);"
+							class="nav-link btn btn-light mr-2"
+							href="/manage/Preferential.page">優惠活動</a></li>
+						<li class="nav-item "><a class="nav-link btn btn-light mr-2"
+							th:href="@{/pages/Preferentialadd.page}">新增優惠</a></li>
+						<li class="nav-item"><a class="nav-link btn btn-light"
+							href="#"><i class="fas fa-sign-out-alt"></i></a></li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+
+		<div class="col-md-8 card mr-auto"
+			style="height: auto; margin: 30px 0 80px 240px; padding: 60px 60px 40px 60px;">
+			<table class="table table-hover">
+			<center>
+				<h2>優惠管理頁面</h2><br>
+			</center>
+				<thead>
+					<tr>
+						<th>圖片</th>
+						<th>活動名稱</th>
+						<th>開始日期</th>
+						<th>截止日期</th>
+						<th></th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="Preferential : ${Preferentials}">
+						<td><img alt="" th:src="*{'data:image/jpeg;base64,'+{Preferential.pic}}"
+									style="width: 120px; height: 90px;"></td>
+						<td>[[${Preferential.eventname}]]</td>
+						<td
+							th:text="${#dates.format(Preferential.startdate,'yyyy-MM-dd')}"></td>
+						<td th:text="${#dates.format(Preferential.enddate,'yyyy-MM-dd')}"></td>
+
+						<td>
+							<button type="button" class="btn btn-success btn-sm mt-1"
+								data-toggle="modal"
+								th:attr="data-target='#exampleModalCenterDetil' + ${Preferential.couponno}">修改
+							</button>
+							<div class="modal fade"
+								th:id="*{'exampleModalCenterDetil' + {Preferential.couponno}}"
+								tabindex="-1" role="dialog"
+								aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+								<div class="modal-dialog modal-dialog-centered" role="document">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="exampleModalCenterTitle">修改餐點明細</h5>
+											<button type="button" class="close" data-dismiss="modal"
+												aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<div class="modal-body">
+
+											<form action="updatePreferential" method="post"
+												enctype="multipart/form-data">
+												<div class="form-group">
+													<input type="text" hidden="hidden" 
+														th:value="*{Preferential.couponno}" class="form-control"
+														name="id"> 
+														<span>原本圖片</span><br>
+													<img alt="" th:src="*{'data:image/jpeg;base64,'+{Preferential.pic}}"
+									style="max-width: 220px; height:150px;">
+														
+														<img class="preview" style="max-width: 220px;
+														 max-height: 200px;">
+														<div class="size" style="margin-left:220px;"></div>
+													<br>
+													
+													<div class="custom-file mb-4">
+														<input type="file" name="file"
+															class="custom-file-input upl" id="customFile1"> <label
+															class="custom-file-label" for="customFile">圖片</label>
+													</div>
+													<label>活動名稱</label> <input type="text" name="ename"
+														th:value="*{Preferential.eventname}" class="form-control">
+													<br> <label>序號</label> <input type="text" name="code"
+													th:value="*{Preferential.code}" class="form-control"> <br> 
+														<label>折扣</label>
+													<input type="number" name="off" max="75"
+													th:value="*{Preferential.off}"	
+													class="form-control"> <br> 
+													<label>開始日期</label>
+													<input type="date" th:value="*{#dates.format(Preferential.startdate,'yyyy-MM-dd')}"
+													name="sdate" class="form-control">
+													<br> 
+													<label>截止日期</label> <input type="date" th:value="*{#dates.format(Preferential.enddate,'yyyy-MM-dd')}"
+														name="edate" class="form-control"> <br>
+													<label>活動敘述</label>
+													<textarea rows="2" name="desc" style="height:140px; word-wrap: break-word; word-break: break-all;"
+														class="form-control">[[${Preferential.description}]]</textarea>
+													<br>
+													<button type="submit" class="btn btn-success">修改</button>
+												</div>
+											</form>
+										</div>
+
+									</div>
+								</div>
+							</div>
+						</td>
+						<td><a th:href="@{/manage/deletePreferential/{id}(id=${Preferential.couponno})}"
+									class="btn btn-danger btn-sm mt-1">刪除</a></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+	</div>
+
+
+	<!-- Bootstrap JS & jQuery -->
+	<script src="js/jquery-3.1.1.min.js"></script>
+	<script src="js/bootstrap.js"></script>
+	<script type="text/javascript">
+		var dropdown = document.getElementsByClassName("dropdown-btn");
+		var i;
+
+		for (i = 0; i < dropdown.length; i++) {
+			dropdown[i].addEventListener("click", function() {
+				this.classList.toggle("active");
+				var dropdownContent = this.nextElementSibling;
+				if (dropdownContent.style.display === "block") {
+					dropdownContent.style.display = "none";
+				} else {
+					dropdownContent.style.display = "block";
+				}
+			});
+		}
+	</script>
+
+	<script type="text/javascript">
+	$(function (){
+		 //圖檔預覽
+	    function format_float(num, pos)
+	    {
+	        var size = Math.pow(10, pos);
+	        return Math.round(num * size) / size;
+	    }
+	 
+	    function preview(input) {
+	 
+	        if (input.files && input.files[0]) {
+	            var reader = new FileReader();
+	            
+	            reader.onload = function (e) {
+	                $('.preview').attr('src', e.target.result);
+	                var KB = format_float(e.total / 1024, 2);
+	                $('.size').text("檔案大小：" + KB + " KB");         
+	            }
+	 
+	            reader.readAsDataURL(input.files[0]);
+	        }
+	    }
+	 
+	    $("body").on("change", ".upl", function (){
+	        preview(this);
+	    })
+	    
+	})
+	</script>
+	<script language="JavaScript" type="text/javascript">
+		var fileSize = g.size; //檔案大小
+		var SizeLimit = 1024;  //上傳上限，單位:byte
+		
+		function checkFile() {
+			
+			var f = document.getElementById("customFile1");
+			var g = document.getElementById("customFile1").files[0];
+			var fileSize = g.size; //檔案大小
+			
+
+        //FOR IE
+     
+            var img = new Image();
+            img.onload = checkSize;
+            img.src = f.value;
+          
+               if (img.src != 'http://localhost:8080/') {
+ 				
+            	if(fileSize > 1024000){	
+            	alert("圖片檔案超過 1024KB 無法新增!");	
+            	checkSize();
+            	
+ 				}
+       		 }
+            
+    }
+
+function checkFile2() {
+			var f2 = document.getElementById("customFile2");
+			var g2 = document.getElementById("customFile2").files[0];
+			var fileSize2 = g2.size; //檔案大小
+
+        //FOR IE
+     
+            var img = new Image();
+            img.onload = checkSize;
+            img.src2 = f2.value;
+
+               if (img.src2 != 'http://localhost:8080/') {
+    				
+               	if(fileSize2 > 1024000){
+    				
+               	alert("圖片檔案超過 1024KB 無法新增!");
+               	checkSize();
+               	
+    				}
+          		 }
+    }
+    //檢查檔案大小
+    function checkSize() {
+        //FOR IE FIX
+  
+        if (fileSize <= SizeLimit) {
+            fileSize = this.fileSize;
+        }
+
+        if (fileSize > SizeLimit) {
+            Message((fileSize / 1024).toPrecision(4), (SizeLimit / 1024).toPrecision(2));
+        } else {
+            document.FileForm.submit();
+        }
+    }
+
+    function Message(file, limit) {
+        var msg = "您所選擇的檔案大小為 " + file + " kB\n已超過上傳上限 " + limit + " kB\n不允許上傳！"
+        alert(msg);
+    } 
+    $("body").on("change", ".upl", function (){
+    	checkFile(this);
+    })
+</script>
+	<script>
+function myFunction() {
+	
+  var y = Math.random().toString(36).substring(4);
+  document.getElementById("demo").value = y ;
+  document.getElementById("demo2").value = y ;
+}
+</script>
+</body>
+</html>

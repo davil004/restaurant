@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<title>肥肥好好吃-西餐專賣</title>
+<link rel="icon" type="image/x-icon" href="assets/img/SmallIconEAT.jpg" />
+<base href="/">
+<!-- Bootstrap CSS  & FontAwsome-->
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="font-awesome/css1/all.css" rel="stylesheet">
+<link rel="icon" href="images/icon.png" />
+<!-- Our Custom CSS -->
+<link rel="stylesheet" href="css/style4.css">
+<link rel="stylesheet" href="css/card.css">
+<link rel="stylesheet" href="css/styles-1.css">
+<script type="text/javascript" src="font-awesome/js1/fontawesome.js"></script>
+
+</head>
+<body>
+	<nav th:fragment="topBar" class="navbar navbar-expand-lg navbar-light">
+		<div class="container-fluid">
+<div class="collapse navbar-collapse " id="navbarCollapse">
+      <ul class="navbar-nav  ml-auto">
+      <li class="nav-item active">
+       <img style="position: absolute; left:0px ; " src="assets/img/logo.jpg" width="250pX" />
+      </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">首頁
+            <span class="sr-only">(current)</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/secure/menu1.page">餐點介紹</a>
+        </li>
+        <li class="nav-item  active">
+          <a class="nav-link" href="/secure/news.page">最新消息</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/secure/about.page">品牌故事</a>
+        </li>
+      </ul>
+    </div>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="nav navbar-nav ml-auto">
+					<li class="nav-item" th:if="${session?.user?.memberNo == null}">
+					<a class="nav-link fl2" href="/secure/login.page"> <i
+							class="fa fa-user" style="color: #17a2b8; font-size: 20px; "></i>
+					</a>
+					</li>
+					
+					<li class="nav-item"   th:if="${session?.user?.memberNo != null}">
+						<form action="/pages/login.controller" method="get">
+				 		<input type="submit" value="登出" name="login" class="btn btn-success"
+				 		 style=" ">
+							</form>	
+					</li>
+
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<div class="wrapper" style="margin-top:-10px;">
+		<!-- Sidebar  -->
+		
+		<!-- Page Content  -->
+		<div id="content">
+			<div class="container" id="app">
+				<div class="row g-2">
+
+
+					<div class="col-md-3" th:fragment="generalSection">
+						<div class="accordion" id="accordionExample"></div>
+					</div>
+
+					<div class="col-md-12">
+						<div class="row g-2">
+
+							<div class="col-md-4 mb-2" th:each="Preferential : ${Preferentials}">
+								<div class="card">
+								<a th:href="@{/secure/newsdetail/{id}(id = ${Preferential.couponno})}">
+									<div class="text-center" style="width:auto;">
+									
+										<img th:src="*{'data:image/jpeg;base64,'+ {Preferential.pic}}"
+											width="100%" height="260">
+									</div>
+									<div class="about text-center">
+
+										<div style="width:100%; align:center;">
+										<div style="width:54%; margin:auto; ">
+										<h4>[[${Preferential.eventname}]]</h4>
+										</div>
+										</div>
+										<div style="margin-top:20px;">
+										<h6>活動時間: &nbsp;&nbsp;[[${#dates.format(Preferential.startdate,'yyyy-MM-dd')}]]
+										- [[${#dates.format(Preferential.enddate,'yyyy-MM-dd')}]]
+										</h6>
+										</div><br>
+									</div></a>
+									<div class="cart-button mt-3 px-2 d-flex 
+									justify-content-between align-items-center">
+										
+									</div>
+								</div>
+							</div>
+
+
+						</div>
+						<div class="line"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Bootstrap JS & jQuery -->
+	<script src="js/jquery-3.1.1.min.js"></script>
+	<script src="js/bootstrap.js"></script>
+	<!-- Popper.JS -->
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
+		integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
+		crossorigin="anonymous"></script>
+	<script type="text/javascript" src="/api/ajaxFetch.js"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#sidebarCollapse').on('click', function() {
+				$('#sidebar').toggleClass('active');
+			});
+		});
+	</script>
+</body>
+</html>

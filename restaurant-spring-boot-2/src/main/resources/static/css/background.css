@@ -1,0 +1,7 @@
+@charset "UTF-8";
+body {
+  background-image: linear-gradient(rgba(59, 58, 57, 0.65), rgba(65, 63, 63, 0.65)), url("assets/img/圖片1.jpg");
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
+}

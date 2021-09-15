@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../css/BackEnd.css" />
+<link rel="stylesheet" type="text/css"
+	href="../css/bootstrap-4.4.1-dist/css/bootstrap.min.css" />
+<script type="text/javascript"
+	src="../css/bootstrap-4.4.1-dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
+	<link href="css/bootstrap.css" rel="stylesheet">
+<base href="/">
+<link href="css/bootstrap.css" rel="stylesheet">
+	<!-- Our Custom CSS -->
+<link rel="stylesheet" href="style4.css">
+<script type="text/javascript" src="font-awesome/js1/fontawesome.js"></script>
+<script type="text/javascript" src=""></script>
+<title>後台系統</title>
+<style type="text/css">
+</style>
+
+</head>
+<body>
+
+	<div class="sidenav">
+		<a class="logo" href="/manage/back.page" style="height:80px; font-size:30px;
+		 margin-top:20px; padding-left:40px; border-bottom:1px solid;">後台系統</a>
+		
+		<li><a href="/manage/product.page">餐點管理</a></li>
+		<li><a href="/manage/order.page">訂單管理</a></li>
+		<button class="dropdown-btn">
+			銷量分析 <i class="fa fa-caret-down"></i>
+		</button>
+		<div class="dropdown-container">
+			<li class="active"><a href="/manage/sales.page">網路訂餐</a></li>
+			<li><a href="/manage/delivery.page">外送訂餐</a></li>
+		</div>
+		<li><a href="/manage/Preferential.page">優惠管理</a></li>
+	</div>
+
+	<div class="main">
+		<div style="width:40%; padding-top:40px; border-bottom-style:solid ; border-bottom-width:10%; margin:auto;">
+		<center>
+			<h2>網路訂餐銷量分析</h2>
+		</center>
+		</div>
+		<center>
+		
+			 <div id="main" style="width: 78%;height:740px; padding-top:40px; padding-bottom:80px;"></div>
+			 <div class="container" id="app">
+			<div class="col md-12 ml-auto">
+				<div class="row g-2">
+
+					<div class="card col-md-3 mb-2">
+						<div class="product col md-12 py-4">
+							<div class="row align-items-center">
+								<div class="col-12 py-4" >
+									<div style="font-weight:bold; color: green;">
+										<span>今日訂單總金額</span>
+									</div>
+									<div>
+										<span th:text="'$' + ${ordermoney}"></span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card col-md-3 mb-2 ml-auto">
+						<div class="product  col md-12 py-4">
+							<div class="row align-items-center">
+								<div class="col-12 py-4">
+									<div  style="font-weight:bold; color: green;">
+										<span>今日網路訂單總金額</span>
+									</div>
+									<div>
+										<span th:text="'$' + ${countsorder}"></span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card col-md-3 mb-2 ml-auto">
+						<div class="product  col md-12 py-4">
+							<div class="row align-items-center">
+								<div class="col-12 py-4">
+									<div  style="font-weight:bold; color:#174cc1;">
+										<span>今日訂單總數</span>
+									</div>
+									<div>
+										<span th:text="${orders}"></span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card col-md-3 mb-2 ml-auto">
+						<div class="product  col md-12 py-4">
+							<div class="row align-items-center">
+								<div class="col-12 py-4">
+									<div  style="font-weight:bold; color: #174cc1;">
+										<span>今日網路訂單總數</span>
+									</div>
+									<div>
+									<span th:text="${sales}"></span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+	
+			</div>
+		
+		</div><br><br>
+			<div class="col-md-12" style="width: 100%; margin-left:8.5%;">
+			<div class="row">
+		<div id="main2" style="width: 700px;height:400px;" class="col-md-5"></div>
+		 <div id="main3" style="width: 700px;height:400px;" class="col-md-5"></div>
+		 </div>
+		</div><br><br><br>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main2'));
+        var data = [[${countsalesmoney}]]
+        var data2 = [[${countsalesmoney2 }]]
+        var data3 = [[${countsalesmoney3}]]
+        
+        myChart.setOption({
+        	backgroundColor: 'rgba(255,255,255,255)',	
+			title: {
+                text: '   網路消費分佈',
+                padding:[ 22 , 0  ,0 , 0]
+            },
+			  legend: {
+                        data:['500以上','500以下','200以下'],
+				 		padding:[ 22 , 0  ,0 , 0]
+                    },
+			tooltip : {
+                      trigger: 'item',
+                      formatter: "{a} <br/>{b} : {c} ({d}%)"
+                      },
+            series : [
+                {
+                    name: '訂單數',
+                    type: 'pie',    // 设置图表类型为饼图
+                    radius: '55%',  // 饼图的半径，外半径为可视区尺寸（容器高宽中较小一项）的 55% 长度。
+                    center: ['50%', '54%'],
+                    data:[          // 数据数组，name 为数据项名称，value 为数据项值
+                        {value:data3, name:'500以上'},
+                        {value:data2, name:'500以下'},
+                        {value:data, name:'200以下'}
+                       
+                    ]
+                }
+            ]
+        })
+    </script>
+			
+        <script type="text/javascript" th:inline="javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main3'));
+    	var data = [[${orders +5800}]]
+    	var data2 = [[${sales + 1700}]]
+        // 指定图表的配置项和数据
+        var option = {
+        	backgroundColor: 'rgba(255,255,255,255)',	
+        	title: {
+                text: '   網路訂單成長',
+                padding:[ 22 , 0  ,0 , 0]
+            },
+            legend: {
+            	  padding:[ 22 , 230  ,0 , 0],
+            },
+            tooltip: {},
+            dataset: {
+                // 提供一份数据。
+                source: [
+                    ['product', '5月', '6月', '7月', '8月', '9月'],
+                    ['所有訂單', 5643, 5485, 5893 ,6069 ,data],
+                    ['網路訂單', 1683, 1273, 1855 ,1049 ,data2],
+                  
+                ]
+            },
+            // 声明一个 X 轴，类目轴（category）。默认情况下，类目轴对应到 dataset 第一列。
+            xAxis: {type: 'category'},
+            // 声明一个 Y 轴，数值轴。
+            yAxis: {},
+            grid: { 
+                top:'18%',
+                left: '4%',  
+                right: '5%',  
+                bottom: '6%',
+               
+                containLabel: true  
+             },
+            // 声明多个 bar 系列，默认情况下，每个系列会自动对应到 dataset 的每一列。
+            series: [
+                {type: 'bar'},
+                {type: 'bar'},
+				{type: 'bar'},
+				{type: 'bar'},
+                {type: 'bar'}
+            ]
+        };
+ 
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
+			 
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+ 
+        
+        setTimeout(function () {
+
+            option = {
+            	backgroundColor: 'rgba(255,255,255,255)',	
+                legend: {
+                	 padding:[ 40 , 0  ,0 , 0],
+                	 textStyle: {
+                         fontSize: 16,
+              	   	 }
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    showContent: false
+                },
+                dataset: {
+                    source: [
+                        ['月份', '4月', '5月', '6月', '7月', '8月', '9月'],
+                        ['主餐', 41.1, 30.4, 65.1, 53.3, 83.8, 98.7],
+                        ['義大利麵/燉飯', 86.5, 92.1, 85.7, 83.1, 73.4, 55.1],
+						['Pizza', 24.1, 67.2, 59.5, 46.4, 65.2, 32.5],
+                        ['沙拉/濃湯', 24.1, 67.2, 79.5, 86.4, 65.2, 82.5],
+                        ['單點', 55.2, 67.1, 69.2, 72.4, 53.9, 39.1]
+                    ]
+                },
+                xAxis: {type: 'category'},
+                yAxis: {gridIndex: 0},
+                grid: {top: '55%'},
+                series: [
+                    {type: 'line', smooth: true, seriesLayoutBy: 'row'},
+                    {type: 'line', smooth: true, seriesLayoutBy: 'row'},
+                    {type: 'line', smooth: true, seriesLayoutBy: 'row'},
+                    {type: 'line', smooth: true, seriesLayoutBy: 'row'},
+					{type: 'line', smooth: true, seriesLayoutBy: 'row'},
+                    {
+                        type: 'pie',
+                        id: 'pie',
+                        radius: '30%',
+                        center: ['50%', '30%'],
+                        label: {
+                            formatter: '{b}: {@4月} ({d}%)'
+                        },
+                        encode: {
+                            itemName: '月份',
+                            value: '4月',
+                            tooltip: '4月'
+                        }
+                    }
+                ]
+            };
+
+            myChart.on('updateAxisPointer', function (event) {
+                var xAxisInfo = event.axesInfo[0];
+                if (xAxisInfo) {
+                    var dimension = xAxisInfo.value + 1;
+                    myChart.setOption({
+                        series: {
+                            id: 'pie',
+                            label: {
+                                formatter: '{b}: {@[' + dimension + ']} ({d}%)'
+                            },
+                            encode: {
+                                value: dimension,
+                                tooltip: dimension
+                            }
+                        }
+                    });
+                }
+            });
+
+            myChart.setOption(option);
+
+        });
+    </script>
+    
+
+		</center>
+	</div>
+
+
+
+	<script type="text/javascript">
+		var dropdown = document.getElementsByClassName("dropdown-btn");
+		var i;
+
+		for (i = 0; i < dropdown.length; i++) {
+			dropdown[i].addEventListener("click", function() {
+				this.classList.toggle("active");
+				var dropdownContent = this.nextElementSibling;
+				if (dropdownContent.style.display === "block") {
+					dropdownContent.style.display = "none";
+				} else {
+					dropdownContent.style.display = "block";
+				}
+			});
+		}
+	</script>
+</body>
+</html>

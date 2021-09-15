@@ -1,0 +1,389 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../css/BackEnd.css" />
+
+<!-- Bootstrap CSS  & FontAwsome-->
+<base href="/">
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="font-awesome/css1/all.css" rel="stylesheet">
+<link rel="icon" href="images/icon.png" />
+<!-- Our Custom CSS -->
+<link rel="stylesheet" href="style4.css">
+<script type="text/javascript" src="font-awesome/js1/fontawesome.js"></script>
+<script type="text/javascript" src=""></script>
+<title>後台系統</title>
+<script type="text/javascript">
+	function clearForm() {
+		var inputs = document.getElementsByTagName("input");
+		for (var i = 0; i < inputs.length; i++) {
+			if (inputs[i].type == "text") {
+				inputs[i].value = "";
+			}
+		}
+	}
+</script>
+</head>
+<body>
+	<div class="sidenav">
+		<a class="logo" href="/manage/back.page" style="height:80px; font-size:30px;
+		 margin-top:20px; margin-bottom:20px; padding-left:40px; border-bottom:1px solid;">後台系統</a>
+
+		<li class="active"><a href="/manage/product.page">餐點管理</a></li>
+		<li><a href="/manage/order.page">訂單管理</a></li>
+		<button class="dropdown-btn">
+			銷量分析 <i class="fa fa-caret-down"></i>
+		</button>
+		<div class="dropdown-container">
+			<li><a href="/manage/sales.page">網路訂餐</a></li>
+			<li><a href="/manage/delivery.page">外送訂餐</a></li>
+		</div>
+		<li><a href="/manage/Preferential.page">優惠管理</a></li>
+	</div>
+
+	<div class="main">
+		<!-- 
+		<div style="width:80%; padding-top:20px; border-bottom-style:solid ; border-bottom-width:20%; margin:auto;">
+		<center>
+		<h2>餐點管理</h2>
+		</center>
+		</div>
+		 -->
+
+		<div id="content">
+			<nav th:fragment="sidebar"
+				class="navbar navbar-expand-lg navbar-light"
+				style="border-bottom: 4px solid #7386D5;">
+			<div class="container-fluid">
+
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="nav navbar-nav ml-auto">
+						
+						<li class="nav-item  active"><a onclick=" handleListProduct(event);"
+							class="nav-link btn btn-light mr-2" href="@{/pages/pcrud.page}">
+								餐點管理</a></li>
+						<li class="nav-item"><a
+							class="nav-link btn btn-light mr-2"
+							th:href="@{/pages/pcrud.page}">新增餐點</a></li>
+						<li class="nav-item "><a class="nav-link btn btn-light mr-2" 
+							th:href="@{/pages/pcrud2.page}">餐點折扣</a></li>		
+								
+					</ul>
+				</div>
+			</div>
+			</nav>
+			<br>
+			<div class="container" id="app">
+				<div class="col-12">
+					<div class="btn-group btn-group-toggle" data-toggle="buttons">
+						<form action="/manage/product.page">
+							<button type="submit" class="btn btn-dark" style="margin-right:10px;">主菜</button>
+						</form>
+						<form action="/manage/product2.page">
+							<button type="submit" class="btn btn-dark" style="margin-right:10px;">義大利麵/燉飯</button>
+						</form>
+						<form action="/manage/product3.page">
+							<button type="submit" class="btn btn-dark" style="margin-right:10px;">pizza</button>
+						</form>
+						<form action="/manage/product4.page">
+							<button type="submit" class="btn btn-dark active" style="margin-right:10px;">沙拉/濃湯</button>
+						</form>
+						<form action="/manage/product5.page">
+							<button type="submit" class="btn btn-dark" style="margin-right:10px;">單點</button>
+						</form>
+					</div>
+				</div>
+				<div class="col-12">
+
+					<hr>
+					<table class="table">
+						<thead class="thead-dark">
+							<tr>
+								<th scope="col">圖片</th>
+								<th scope="col">名稱</th>
+								<th scope="col">數量</th>
+								<th scope="col">價格</th>
+								<th scope="col">折扣</th>
+								<th scope="col">修改</th>
+								<th scope="col">圖片修改</th>
+								<th scope="col">刪除</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="product : ${products}">
+								<th scope="row"><img alt=""
+									th:src="*{'data:image/jpeg;base64,'+{product.image}}"
+									style="width: 160px; height: 120px;"></th>
+								<td>[[*{product.name}]] <!-- Button trigger modal --> <br>
+									<!-- Modal -->
+
+									<div class="modal fade"
+										th:id="*{'exampleModalCenter'+{product.id}}" tabindex="-1"
+										role="dialog" aria-labelledby="exampleModalCenterTitle"
+										aria-hidden="true">
+										<div class="modal-dialog modal-dialog-centered"
+											role="document">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title" id="exampleModalCenterTitle">change
+													</h5>
+													<button type="button" class="close" data-dismiss="modal"
+														aria-label="Close">
+														<span aria-hidden="true">&times;</span>
+													</button>
+												</div>
+												<div class="modal-body">
+													<form action="/Admin/changeName" method="post">
+														<div class="form-group">
+															<input type="hidden" th:value="*{product.id}"
+																class="form-control" name="id"> <label>new
+																Product name</label> <input type="text" name="newPname"
+																class="form-control"> <br>
+															<button type="submit" class="btn btn-primary">submit</button>
+														</div>
+													</form>
+
+												</div>
+
+											</div>
+										</div>
+									</div>
+
+								</td>
+
+								<td>[[*{product.quantity}]] <!-- Button trigger modal --> <br>
+									<!-- Modal -->
+									<div class="modal fade"
+										th:id="*{'exampleModalCenterquantity'+{product.id}}"
+										tabindex="-1" role="dialog"
+										aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+										<div class="modal-dialog modal-dialog-centered"
+											role="document">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title" id="exampleModalCenterTitle">change
+														product quantity</h5>
+													<button type="button" class="close" data-dismiss="modal"
+														aria-label="Close">
+														<span aria-hidden="true">&times;</span>
+													</button>
+												</div>
+												<div class="modal-body">
+
+													<form action="/Admin/changeQuantity" method="post">
+														<div class="form-group">
+															<input type="text" hidden="hidden"
+																th:value="*{product.id}" class="form-control" name="id">
+															<label>new Product quantity</label> <input type="number"
+																th:value="${product.quantity}" name="newQuantity"
+																class="form-control"> <br>
+															<button type="submit" class="btn btn-primary">submit</button>
+														</div>
+													</form>
+												</div>
+
+											</div>
+										</div>
+									</div>
+								</td>
+
+								<td>[[*{product.price}]]$<!-- Button trigger modal --> <br>
+									<!-- Modal -->
+									<div class="modal fade"
+										th:id="*{'exampleModalCenterPrice'+{product.id}}"
+										tabindex="-1" role="dialog"
+										aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+										<div class="modal-dialog modal-dialog-centered"
+											role="document">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title" id="exampleModalCenterTitle">change
+														product price</h5>
+													<button type="button" class="close" data-dismiss="modal"
+														aria-label="Close">
+														<span aria-hidden="true">&times;</span>
+													</button>
+												</div>
+												<div class="modal-body">
+
+													<form action="/Admin/changePrice" method="post">
+														<div class="form-group">
+															<input type="text" hidden="hidden"
+																th:value="*{product.id}" class="form-control" name="id">
+															<label>new Product price</label> <input type="text"
+																name="newPrice" class="form-control"> <br>
+															<button type="submit" class="btn btn-primary">submit</button>
+														</div>
+													</form>
+												</div>
+
+											</div>
+										</div>
+									</div>
+								</td>
+
+								<td>-[[*{product.discount.discount}]]%<!-- Button trigger modal -->
+									<br>
+
+								</td>
+
+								<td>
+									<button type="button" class="btn btn-success btn-sm mt-1"
+										data-toggle="modal"
+										th:attr="data-target='#exampleModalCenterDetil'+${product.id}">修改
+									</button>
+									<div class="modal fade"
+										th:id="*{'exampleModalCenterDetil'+{product.id}}"
+										tabindex="-1" role="dialog"
+										aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+										<div class="modal-dialog modal-dialog-centered"
+											role="document">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title" id="exampleModalCenterTitle">修改餐點明細</h5>
+													<button type="button" class="close" data-dismiss="modal"
+														aria-label="Close">
+														<span aria-hidden="true">&times;</span>
+													</button>
+												</div>
+												<div class="modal-body">
+
+													<form action="/manage/changedetil4" method="post"
+														enctype="multipart/form-data">
+														<div class="form-group">
+															<input type="text" hidden="hidden"
+																th:value="*{product.id}" class="form-control" name="id">
+															
+															<label>餐點名稱</label> <input type="text" name="newPname"
+																class="form-control" th:value="${product.name}">
+															<br> <label>餐點價格</label> <input type="text"
+																name="newPrice" class="form-control"
+																th:value="${product.price}"> <br> <label>數量</label>
+															<input type="number" th:value="${product.quantity}"
+																name="newQuantity" class="form-control"> <br>
+															<label>餐點折扣</label> <input type="number"
+																th:value="${product.discount.discount}" min="0" max="75"
+																name="newDiscount" class="form-control"> <br>
+															<label>餐點類型:&nbsp&nbsp</label><label>[[${product.special}]]</label><br>
+															<input type="radio" id="${product.special}"
+																name="newSpecial" value="一般" checked="checked">
+															  <label for="html">一般</label>   <input type="radio"
+																id="${product.special}" name="newSpecial" value="素食">
+															  <label for="css">素食</label>   <input type="radio"
+																id="${product.special}" name="newSpecial" value="辣椒">
+															  <label for="javascript">辣椒</label><br> <label>new
+																Product description </label>
+															<textarea rows="2" name="newDescription"
+																class="form-control">[[${product.description}]]</textarea>
+															<br>
+															<button type="submit" class="btn btn-primary">確認</button>
+														</div>
+													</form>
+												</div>
+
+											</div>
+										</div>
+									</div>
+								</td>
+								<td>
+									<button type="button" class="btn btn-success btn-sm mt-1"
+										data-toggle="modal"
+										th:attr="data-target='#exampleModalCenterpic'+${product.id}">圖片修改
+									</button>
+									<div class="modal fade"
+										th:id="*{'exampleModalCenterpic'+{product.id}}"
+										tabindex="-1" role="dialog"
+										aria-labelledby="exampleModalCenterpic" aria-hidden="true">
+										<div class="modal-dialog modal-dialog-centered"
+											role="document">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title" id="exampleModalCenterpic">圖片修改</h5>
+													<button type="button" class="close" data-dismiss="modal"
+														aria-label="Close">
+														<span aria-hidden="true">&times;</span>
+													</button>
+												</div>
+												<div class="modal-body">
+
+													<form action="/pages/updatePic4" method="post"
+														enctype="multipart/form-data">
+														<div class="form-group">
+															<input type="text" hidden="hidden"
+																th:value="*{product.id}" class="form-control" name="id">
+															<img alt=""
+																th:src="*{'data:image/jpeg;base64,'+{product.image}}"
+																style="width: 460px; height: 300px;"><br><br>
+															<div class="custom-file mb-4">
+																<input type="file" name="newfile"
+																	class="custom-file-input" id="customFile"> <label
+																	class="custom-file-label" for="customFile">圖片</label>
+															</div>
+															
+															<button type="submit" class="btn btn-primary">確認</button>
+														</div>
+													</form>
+												</div>
+
+											</div>
+										</div>
+									</div>
+								</td>
+
+								<td><a
+									th:href="@{/manage/deleteProd4/{id}(id=${product.id})}"
+									class="btn btn-danger btn-sm mt-1">刪除</a></td>
+							</tr>
+						</tbody>
+					</table>
+					<hr>
+				</div>
+
+			</div>
+			<div class="line"></div>
+		</div>
+	</div>
+	<!-- Bootstrap JS & jQuery -->
+	<script src="js/jquery-3.1.1.min.js"></script>
+	<script src="js/bootstrap.js"></script>
+	<!-- Popper.JS -->
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
+		integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
+		crossorigin="anonymous"></script>
+	<script type="text/javascript" src="api/ajaxFetch.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#sidebarCollapse').on('click', function() {
+				$('#sidebar').toggleClass('active');
+			});
+		});
+	</script>
+	<script type="text/javascript">
+		var dropdown = document.getElementsByClassName("dropdown-btn");
+		var i;
+
+		for (i = 0; i < dropdown.length; i++) {
+			dropdown[i].addEventListener("click", function() {
+				this.classList.toggle("active");
+				var dropdownContent = this.nextElementSibling;
+				if (dropdownContent.style.display === "block") {
+					dropdownContent.style.display = "none";
+				} else {
+					dropdownContent.style.display = "block";
+				}
+			});
+		}
+	</script>
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<title>肥肥好好吃-西餐專賣</title>
+<link rel="icon" type="image/x-icon" href="assets/img/SmallIconEAT.jpg" />
+<base href="/">
+<!-- Bootstrap CSS  & FontAwsome-->
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="font-awesome/css1/all.css" rel="stylesheet">
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+<link rel="icon" href="images/icon.png" />
+<!-- Our Custom CSS -->
+<link rel="stylesheet" href="style4.css">
+<link rel="stylesheet" href="cart.css">
+<link rel="stylesheet" href="card.css">
+<link rel="stylesheet" href="css/styles-1.css">
+<script type="text/javascript" src="font-awesome/js1/fontawesome.js"></script>
+<script  src=""></script>
+
+</head>
+<body>
+	<nav th:fragment="topBar" class="navbar navbar-expand-lg navbar-light">
+		<div class="container-fluid">
+			<div class="collapse navbar-collapse " id="navbarCollapse">
+				<ul class="navbar-nav  ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="#">首頁
+            <span class="sr-only">(current)</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/secure/menu1.page">餐點介紹</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/secure/news.page">最新消息</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/secure/about.page">品牌故事</a>
+        </li>
+      </ul>
+			</div>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="nav navbar-nav ml-auto">
+					<li class="nav-item"><a class="nav-link fl1"
+						th:href="@{/secure/shoppingCart}"> <i class="fas fa-cart-plus"
+							title="View Cart" style="color: red; font-size: 20px"></i><span
+							class="label">[[${shoppingCart.itemsNumber}]]</span>
+					</a></li>
+					<li class="nav-item" th:if="${session?.user?.memberNo == null}">
+					<a class="nav-link fl2" href="/secure/login.page"> <i
+							class="fa fa-user" style="color: #17a2b8; font-size: 20px; "></i>
+					</a></li>
+					
+					<li class="nav-item"   th:if="${session?.user?.memberNo != null}">
+						<form action="/pages/login.controller" method="get">
+				 		<input type="submit" value="登出" name="login" class="btn btn-success"
+				 		>
+							</form>	</li>
+
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<div class="wrapper" style="margin-top: -10px;">
+		<!-- Sidebar  -->
+		<nav th:fragment="sidebar" id="sidebar">
+			<ul class="list-unstyled components">
+			<li><a href="/secure/menu1.page"><i class="fas fa-hamburger"></i> 主菜
+				</a></li>
+				<li><a href="/secure/menu2.page"> <i class="fas fa-bacon"></i>義大利麵/燉飯</a></li>	
+				<li><a href="/secure/menu3.page"> <i class="fas fa-pizza-slice"></i>pizza 
+				</a></li>
+				<li><a href="/secure/menu4.page"> <i class="fas fa-leaf"></i> 沙拉/濃湯
+				</a></li>
+				<li  ><a href="/secure/menu5.page"> <i class="fas fa-book-reader"></i>單點
+				</a>
+				</li>
+			</ul>
+		</nav>
+
+		<!-- Page Content  -->
+		<div id="content">
+			<div class="line"></div>
+			<div class="container" id="app">
+
+				<div class="row g-2">
+					<div class="col-md-3"></div>
+
+					<div class="col-md-12">
+						<div class="row g-2">
+
+							<div class="table-responsive shopping-cart"
+								style="background-color: #fff">
+								<table class="table">
+									<thead>
+										<tr>
+											<th>餐點名稱</th>
+											<th class="text-center">數量</th>
+											<th class="text-center">總價</th>
+											<th class="text-center">折扣</th>
+											<th class="text-center"><a
+												class="btn btn-sm btn-outline-danger clear"
+												th:href="@{/clearShoppingCart}">清除 </a></th>
+										</tr>
+									</thead>
+									
+									
+									<tbody>
+									<tr th:each="cartItem : ${shoppingCart.items}">
+											<td>
+												<div class="product-item">
+													<a class="product-thumb" href="#"><img
+														th:src="*{'data:image/jpeg;base64,'+{cartItem.product.image}}" style="height:80px;"
+														alt="Product"></a>
+													<div class="product-info">
+														<h4 class="product-title">
+															<a >[[${cartItem.product.name}]]</a>
+														</h4>
+														<span><em>Price:</em>$[[${cartItem.product.price}]] </span>
+															
+													</div>
+												</div>
+											</td>
+											<td class="text-center">
+											<form action="/updateShoppingCart" method="post">
+											<input type="hidden" th:value="${cartItem.id}" name="item_id"/>
+												<div class="input-group">
+													<input type="number" name="quantity" th:value="${cartItem.quantity}" th:attr="max=${cartItem.product.quantity}"
+													 class="form-control form-control-sm"/>
+													 <button class="btn btn-success btn-sm btn-custom" type="submit"><i class="fa fa-check"></i></button>
+												</div>
+												</form>
+											</td>
+											<td class="text-center text-lg text-medium">$[[${cartItem.product.price * cartItem.quantity}]]</td>
+											<td class="text-center text-lg text-medium">$[[${(100-cartItem.product.discount.discount) * cartItem.product.price / 100 }]]</td>
+											<td class="text-center"><a class="remove-from-cart"
+												th:href="@{/removeCartItem/{id}(id = ${cartItem.id})}" data-toggle="tooltip"
+												><i class="fa fa-trash"></i></a></td>
+										</tr>	
+										
+										<tr th:each="cartItem : ${shoppingCart.items2}">
+											<td>
+												<div class="product-item">
+													<a class="product-thumb" href="#"><img
+														th:src="*{'data:image/jpeg;base64,'+{cartItem.product2.image}}" style="height:80px;"
+														alt="Product"></a>
+													<div class="product-info">
+														<h4 class="product-title">
+															<a>[[${cartItem.product2.name}]]</a>
+														</h4>
+														<span><em>Price:</em>$[[${cartItem.product2.price}]]</span>
+															
+													</div>
+												</div>
+											</td>
+											<td class="text-center">
+											<form action="/updateShoppingCart2" method="post">
+											<input type="hidden" th:value="${cartItem.id}" name="item_id"/>
+												<div class="input-group">
+													<input type="number" name="quantity" th:value="${cartItem.quantity}" th:attr="max=${cartItem.product2.quantity}"
+													 class="form-control form-control-sm"/>
+													 <button class="btn btn-success btn-sm btn-custom" type="submit"><i class="fa fa-check"></i></button>
+												</div>
+												</form>
+											</td>
+											<td class="text-center text-lg text-medium">$[[${cartItem.product2.price * cartItem.quantity}]]</td>
+											<td class="text-center text-lg text-medium">$[[${(100-cartItem.product2.discount.discount) * cartItem.product2.price / 100 }]]</td>
+											<td class="text-center"><a class="remove-from-cart"
+												th:href="@{/removeCartItem2/{id}(id = ${cartItem.id})}" data-toggle="tooltip"
+												><i class="fa fa-trash"></i></a></td>
+										</tr>	
+										
+										<tr th:each="cartItem : ${shoppingCart.items3}">
+											<td>
+												<div class="product-item">
+													<a class="product-thumb" href="#"><img
+														th:src="*{'data:image/jpeg;base64,'+{cartItem.product3.image}}" style="height:80px;"
+														alt="Product"></a>
+													<div class="product-info">
+														<h4 class="product-title">
+															<a>[[${cartItem.product3.name}]]</a>
+														</h4>
+														<span><em>Price:</em>$[[${cartItem.product3.price}]]</span>
+															
+													</div>
+												</div>
+											</td>
+											<td class="text-center">
+											<form action="/updateShoppingCart3" method="post">
+											<input type="hidden" th:value="${cartItem.id}" name="item_id"/>
+												<div class="input-group">
+													<input type="number" name="quantity" th:value="${cartItem.quantity}" th:attr="max=${cartItem.product3.quantity}"
+													 class="form-control form-control-sm"/>
+													 <button class="btn btn-success btn-sm btn-custom" type="submit"><i class="fa fa-check"></i></button>
+												</div>
+												</form>
+											</td>
+											<td class="text-center text-lg text-medium">$[[${cartItem.product3.price * cartItem.quantity}]]</td>
+											<td class="text-center text-lg text-medium">$[[${(100-cartItem.product3.discount.discount )* cartItem.product3.price / 100 }]]</td>
+											<td class="text-center"><a class="remove-from-cart"
+												th:href="@{/removeCartItem3/{id}(id = ${cartItem.id})}" data-toggle="tooltip"
+												><i class="fa fa-trash"></i></a></td>
+										</tr>		
+										
+										
+										<tr th:each="cartItem : ${shoppingCart.items4}">
+											<td>
+												<div class="product-item">
+													<a class="product-thumb" href="#"><img
+														th:src="*{'data:image/jpeg;base64,'+{cartItem.product4.image}}" style="height:80px;"
+														alt="Product"></a>
+													<div class="product-info">
+														<h4 class="product-title">
+															<a>[[${cartItem.product4.name}]]</a>
+														</h4>
+														<span><em>Price:</em>$[[${cartItem.product4.price}]]</span>
+															
+													</div>
+												</div>
+											</td>
+											<td class="text-center">
+											<form action="/updateShoppingCart4" method="post">
+											<input type="hidden" th:value="${cartItem.id}" name="item_id"/>
+												<div class="input-group">
+													<input type="number" name="quantity" th:value="${cartItem.quantity}" th:attr="max=${cartItem.product4.quantity}"
+													 class="form-control form-control-sm"/>
+													 <button class="btn btn-success btn-sm btn-custom" type="submit"><i class="fa fa-check"></i></button>
+												</div>
+												</form>
+											</td>
+											<td class="text-center text-lg text-medium">$[[${cartItem.product4.price * cartItem.quantity}]]</td>
+											<td class="text-center text-lg text-medium">$[[${(100-cartItem.product4.discount.discount) * cartItem.product4.price / 100 }]]</td>
+											<td class="text-center"><a class="remove-from-cart"
+												th:href="@{/removeCartItem4/{id}(id = ${cartItem.id})}" data-toggle="tooltip"
+												><i class="fa fa-trash"></i></a></td>
+										</tr>	
+										
+										<tr th:each="cartItem : ${shoppingCart.items5}">
+											<td>
+												<div class="product-item">
+													<a class="product-thumb" href="#"><img
+														th:src="*{'data:image/jpeg;base64,'+{cartItem.product5.image}}" style="height:80px;"
+														alt="Product"></a>
+													<div class="product-info">
+														<h4 class="product-title">
+															<a>[[${cartItem.product5.name}]]</a>
+														</h4>
+														<span><em>Price:</em>$[[${cartItem.product5.price}]]</span>
+															
+													</div>
+												</div>
+											</td>
+											<td class="text-center">
+											<form action="/updateShoppingCart5" method="post">
+											<input type="hidden" th:value="${cartItem.id}" name="item_id"/>
+												<div class="input-group">
+													<input type="number" name="quantity" th:value="${cartItem.quantity}" th:attr="max=${cartItem.product5.quantity}"
+													 class="form-control form-control-sm"/>
+													 <button class="btn btn-success btn-sm btn-custom" type="submit"><i class="fa fa-check"></i></button>
+												</div>
+												</form>
+											</td>
+											<td class="text-center text-lg text-medium">$[[${cartItem.product5.price * cartItem.quantity}]]</td>
+											<td class="text-center text-lg text-medium">$[[${(100-cartItem.product5.discount.discount) * cartItem.product5.price / 100 }]]</td>
+											<td class="text-center"><a class="remove-from-cart"
+												th:href="@{/removeCartItem5/{id}(id = ${cartItem.id})}" data-toggle="tooltip"
+												><i class="fa fa-trash"></i></a></td>
+										</tr>		
+									</tbody>
+								</table>
+							</div>
+							<div class="shopping-cart-footer">
+								<div class="column">
+									<form class="coupon-form" action="/copenShoppingCart" method="post">
+										<input class="form-control form-control-sm" type="text" id="codes" name="code" th:value="${session.code}"
+											placeholder="優惠代碼" >
+										<button  id="ok" class="btn btn-outline-primary btn-sm" type="submit">確認代碼</button>
+											<span th:text="${session.error}" class="text-primary"></span>
+											<span th:text="${session.offer}" class="text-primary"></span>
+									</form>
+								</div>
+								<div class="column text-lg">
+									<b style="color:white;" th:if="${session.off==null}">總金額: <span class="text-medium">$[[${shoppingCart.totalPrice}]]</span></b>
+									<b style="color:white;" th:if="${session.off!=null}">總金額: <span class="text-medium">$[[${shoppingCart.totalPrice*(100-session.off)/100}]]</span></b>
+								</div>
+							</div>
+							<div class="shopping-cart-footer">
+								<div class="column">
+									<a class="btn btn-outline-secondary back"  href="/secure/menu1.page"
+										style="font-weight: bold; color:white;"><i class="fas fa-arrow-left"></i>&nbsp;返回</a>
+								</div>
+								<div class="column cart-button">
+									<form action="/cashShoppingCart">
+									<input type="hidden" name="coupen" th:value="${session.code}">
+									<input type="hidden" name="coupencurret" th:value="${session.current}">
+										<button class="btn checkout btn-success" type="submit">前往結帳</button>
+									</form>
+								</div>
+							</div>
+
+						</div>
+					</div>
+
+				</div>
+				<div class="line"></div>
+			</div>
+		</div>
+		<!-- Bootstrap JS & jQuery -->
+		<script src="js/jquery-3.1.1.min.js"></script>
+		<script src="js/bootstrap.js"></script>
+		<!-- Popper.JS -->
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
+			integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
+			crossorigin="anonymous"></script>
+		<script type="text/javascript" src="api/ajaxFetch.js"></script>
+
+		<script>
+			$(document).ready(function() {
+				$('#sidebarCollapse').on('click', function() {
+					$('#sidebar').toggleClass('active');
+				});
+				
+			});
+			
+		</script>
+		
+</body>
+</html>

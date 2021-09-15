@@ -1,0 +1,9 @@
+@charset "UTF-8";
+.form{
+    
+    position: absolute;
+    top: 500%;
+    left: 50%;
+    margin: -130px 0 0 -200px;
+    background-color:white; width:350px; border-style: double;
+}

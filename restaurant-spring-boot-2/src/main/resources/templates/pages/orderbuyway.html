@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css"
+	href="../css/bootstrap-4.4.1-dist/css/bootstrap.min.css" />
+<script type="text/javascript"
+	src="../css/bootstrap-4.4.1-dist/js/bootstrap.bundle.min.js"></script>
+<link href="css/bootstrap.css" rel="stylesheet">
+<base href="/">
+<link rel="stylesheet" type="text/css" href="/css/BackEnd.css" />
+<link href="css/bootstrap.css" rel="stylesheet">
+<!-- Our Custom CSS -->
+<link rel="stylesheet" href="style4.css">
+<link rel="stylesheet" href="css/bootstrap-select.min.css">
+<script type="text/javascript" src="font-awesome/js1/fontawesome.js"></script>
+<title>後台系統</title>
+<style type="text/css">
+</style>
+
+</head>
+<body>
+
+	<div class="sidenav">
+		<a class="logo" href="/manage/back.page"
+			style="height: 80px; font-size: 30px; padding-left: 60px;">Logo</a>
+
+		<li><a href="/manage/product.page">餐點管理</a></li>
+		<li class="active"><a href="/manage/order.page">訂單管理</a></li>
+		<button class="dropdown-btn">
+			銷量分析 <i class="fa fa-caret-down"></i>
+		</button>
+		<div class="dropdown-container">
+			<li><a href="/manage/sales.page">網路訂餐</a></li>
+			<li><a href="/manage/delivery.page">外送訂餐</a></li>
+		</div>
+		<li><a href="/manage/Preferential.page">優惠管理</a></li>
+	</div>
+
+	<div class="main">
+		<div
+			style="width: 60%; padding-top: 80px;  margin: auto;">
+		
+		</div>
+		<center>
+			<br><br><br><br>
+			<div class="col md-12">
+				<div class="card" style="width: 300px; height:160px; padding-top:10px;">
+				
+				
+				<h5 style="padding-top:20px; font-size:40px;">會員已取餐</h5>
+				<div class="column cart-button">
+									<a class="btn checkout btn-success" href="/manage/order.page">返回訂單</a>
+								</div>
+				</div>
+			</div>
+			<br>
+			
+		</center>
+	</div>
+
+	</center>
+	</div>
+
+	<!-- Bootstrap JS & jQuery -->
+	<script src="js/jquery-3.1.1.min.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
+		integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
+		crossorigin="anonymous"></script>
+	<script src="js/bootstrap.js"></script>
+	<script type="text/javascript" src="js/bootstrap-select.min.js"></script>
+
+	<script type="text/javascript">
+		var dropdown = document.getElementsByClassName("dropdown-btn");
+		var i;
+
+		for (i = 0; i < dropdown.length; i++) {
+			dropdown[i].addEventListener("click", function() {
+				this.classList.toggle("active");
+				var dropdownContent = this.nextElementSibling;
+				if (dropdownContent.style.display === "block") {
+					dropdownContent.style.display = "none";
+				} else {
+					dropdownContent.style.display = "block";
+				}
+			});
+		}
+	</script>
+</body>
+</html>

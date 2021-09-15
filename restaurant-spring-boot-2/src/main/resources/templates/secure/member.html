@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+	integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+	crossorigin="anonymous"></script>
+<body>
+<table style="background-color: hsla(39, 77%, 83%, 0.514)">
+		<tr>
+			<td colspan="2" align="center"><h1>會員資料</h1></td>
+
+		</tr>
+		<tr>
+			<td>會員編號</td>
+			<td th:text="${session.user.memberNo}"></td>
+		</tr>
+		<tr>
+			<td>帳號</td>
+			<td th:text="${session.user.account}"></td>
+		</tr>
+		<tr>
+			<td>密碼</td>
+			<td th:text="${session.user.password}"></td>
+		</tr>
+		<tr>
+			<td>姓名</td>
+			<td th:text="${session.user.memberName}"></td>
+		</tr>
+		<tr>
+			<td>電話</td>
+			<td th:text="${session.user.phone}"></td>
+		</tr>
+		<tr>
+			<td>地址</td>
+			<td th:text="${session.user.address}"></td>
+		</tr>
+
+		<tr>
+			<form th:action="@{/pages/login.controller}"
+				method="get">
+				<input type="hidden" name="account"value="">
+				<td>
+				<input type="submit" value="登出" name="login">
+				</td>
+				<td></td>
+			</form>
+		</tr>
+	</table>
+</body>
+</html>

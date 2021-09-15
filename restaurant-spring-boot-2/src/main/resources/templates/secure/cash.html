@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<title>肥肥好好吃-西餐專賣</title>
+<link rel="icon" type="image/x-icon" href="assets/img/SmallIconEAT.jpg" />
+<base href="/">
+<!-- Bootstrap CSS  & FontAwsome-->
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="font-awesome/css1/all.css" rel="stylesheet">
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+<link rel="icon" href="images/icon.png" />
+<!-- Our Custom CSS -->
+<link rel="stylesheet" href="style4.css">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="card.css">
+<link rel="stylesheet" href="css/styles-1.css">
+<script type="text/javascript" src="font-awesome/js1/fontawesome.js"></script>
+<script type="text/javascript" src=""></script>
+
+</head>
+<body>
+	<nav th:fragment="topBar" class="navbar navbar-expand-lg navbar-light">
+		<div class="container-fluid">
+			<div class="collapse navbar-collapse " id="navbarCollapse">
+      <ul class="navbar-nav  ml-auto">
+      <li class="nav-item active">
+       <img style="position: absolute; left:0px ; " src="assets/img/logo.jpg" width="250pX" />
+      </li>
+        <li class="nav-item active">
+          <a class="nav-link" href="#">首頁
+            <span class="sr-only">(current)</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/secure/menu1.page">餐點介紹</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/secure/news.page">最新消息</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/secure/about.page">品牌故事</a>
+        </li>
+      </ul>
+    </div>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="nav navbar-nav ml-auto">
+					<li class="nav-item"><a class="nav-link fl1"
+						th:href="@{/secure/shoppingCart.page}"> <i class="fas fa-cart-plus"
+							title="View Cart" style="color: red; font-size: 20px"></i><span
+							class="label">[[${shoppingCart.itemsNumber}]]</span>
+					</a></li>
+					<li class="nav-item" th:if="${session?.user?.memberNo == null}">
+					<a class="nav-link fl2" href="/secure/login.page"> <i
+							class="fa fa-user" style="color: #17a2b8; font-size: 20px; "></i>
+					</a>
+					</li>
+					
+					<li class="nav-item"   th:if="${session?.user?.memberNo != null}">
+						<form action="/pages/login.controller" method="get">
+				 		<input type="submit" value="登出" name="login" class="btn btn-success"
+				 		 style=" ">
+							</form>	
+					</li>
+
+				</ul>
+			</div>
+		</div>
+	</nav>
+	 <section class="page-section cta">
+            <div  class="container">
+                <div  class="row">
+                    <div class="col-xl-9 mx-auto">
+                        <div  class="cta-inner bg-faded text-center rounded"  >
+                            <h2 class="section-heading mb-5">
+                                <span class=".section-heading-lower">付款資訊</span>
+                            </h2>
+                            <div class="row">
+                                <div class="col-x1-9">
+                                     <h2 class="section-heading" th:each="buycar:${buycar}">
+                                        <p class="section-heading-upper">使用者資料</p>
+                                        <p class="section-heading-upper">姓名:<span th:text="${buycar.memberName}"></span></p>
+                                        <p class="section-heading-upper">電話:<span th:text="${buycar.phone}"></span></p>
+                                        <p class="section-heading-upper">地址:<span th:text="${buycar.address}"></span></p>
+                                    </h2>
+                                </div>
+                                 <form action="/cash.controller" method="post">
+                                 <input type="hidden" name="finallmoney" th:value="${session.finallmoney}">
+                                	<div class="col-x1-9 my-2">
+                                    <p class="section-heading-upper">外帶/外送</p>
+                                    <input type="radio"  id="takeout" name="foodWay" value="takeout" checked>
+                                    <label for="takeout">外帶</label>
+                                    <input type="radio" id="delivery" name="foodWay" value="delivery">
+                                    <label for="delivery">外送</label>
+                                    <div class="row my-2">
+                                    	<span th:text='${session.fails}'></span>
+                                    </div>
+                                    <div class="row my-2" id="foodck" style="display: none;">
+                                        <div class="my-2">
+                                            <p class="section-heading-upper">外送確認</p>
+                                            <input type="radio" id="okck" name="addWay" value="okck" checked>
+                                            <label for="okck">確認</label>
+                                            <input type="radio" id="chageck" name="addWay" value="chageck">
+                                            <label for="chageck">修改</label>
+                                        </div>
+                                        <div class="my-2" style="display: none;" id="addchtest">
+                                            <input type="text" class="form-control" name="addch" id="addch"  placeholder="請輸入修改地址">
+                                        </div>
+                                    </div>  
+                                </div>
+                                <div class="col-x1-9 my-2 m1">
+                                    <p class="section-heading-upper">付款方式</p>
+                                    <input type="radio"  id="cash" name="moneyWay" value="cash" checked>
+                                    <label for="cash">現金</label>
+                                </div>
+                                <div class="col-x1-9 my-2"> 
+                               		
+                                    <input name="cashgo" type="submit" class="btn btn-warning" value="返回購物">
+                                    <input name="cashgo" type="submit" class="btn btn-warning" value="確認結帳">
+                                </div>
+                                </form>
+                            </div>
+         
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+		<!-- Bootstrap JS & jQuery -->
+		<script src="js/jquery-3.1.1.min.js"></script>
+		<script src="js/bootstrap.js"></script>
+		<!-- Popper.JS -->
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
+			integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
+			crossorigin="anonymous"></script>
+		<script type="text/javascript" src="api/ajaxFetch.js"></script>
+	
+		 <script>
+            function back(){
+                window.location.href="#";
+            }
+
+           $(function(){
+            $('.x1 .xx').on("click",function(){
+                console.log($(this).closest('.x1').index());
+                let idx = $(this).closest('.x1').index();
+                $('.x1').eq(idx).remove();  
+            })
+
+            // var temp2=$('input[name="moneyWay"]:checked').prop('value');
+            // console.log(temp2)
+            
+
+            $('input:radio[name=foodWay]').change(function(){
+                if($(this).val() == "delivery"){
+                    $('#foodck').show();
+            
+                }else if($(this).val() == "takeout"){
+                    $('#foodck').hide();
+                }
+            })
+			$('input:radio[name=addWay]').change(function(){
+                    if($(this).val()=="chageck"){
+                          $('#addchtest').show();
+                    }else if($(this).val()=="okck"){
+                          $('#addchtest').hide();
+                    }
+             })
+           })
+        </script>
+		
+</body>
+</html>

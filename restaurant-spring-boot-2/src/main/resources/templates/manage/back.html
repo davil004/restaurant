@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">	 
+<link rel="stylesheet" type="text/css" href="../css/BackEnd.css" />
+<link rel="stylesheet" type="text/css"
+	href="../css/bootstrap-4.4.1-dist/css/bootstrap.min.css" />
+<script type="text/javascript"
+	src="../css/bootstrap-4.4.1-dist/js/bootstrap.bundle.min.js"></script>
+<link href="css/bootstrap.css" rel="stylesheet">
+<base href="/">
+<link href="css/bootstrap.css" rel="stylesheet">
+<!-- Our Custom CSS -->
+<link rel="stylesheet" href="style4.css">
+<script type="text/javascript" src="font-awesome/js1/fontawesome.js"></script>
+<script type="text/javascript" src=""></script>
+<script src="https://cdn.staticfile.org/echarts/4.3.0/echarts.min.js"></script>
+<title>肥肥好好吃管理系統</title>
+<style type="text/css">
+</style>
+
+</head>
+<body>
+
+	<div class="sidenav">
+		<a class="logo" href="/manage/back.page" style="height:80px; font-size:30px;
+		 margin-top:20px; margin-bottom:20px; padding-left:40px; border-bottom:1px solid;">後台系統</a>
+
+		<li><a href="/manage/product.page">餐點管理</a></li>
+		<li><a href="/manage/order.page">訂單管理</a></li>
+		<button class="dropdown-btn">
+			銷量分析 <i class="fa fa-caret-down"></i>
+		</button>
+		<div class="dropdown-container">
+			<li><a href="/manage/sales.page">網路訂餐</a></li>
+			<li><a href="/manage/delivery.page">外送訂餐</a></li>
+		</div>
+		<li><a href="/manage/Preferential.page">優惠管理</a></li>
+	</div>
+
+	<div class="main">
+		<div
+			style="width: 80%; padding-top: 40px; border-bottom-width: 20%; margin: auto;">
+			
+		</div>
+		
+		<div class="container" id="app">
+			<div class="col md-12 ml-auto">
+				<div class="row g-2">
+
+					<div class="card col-md-3 mb-2">
+						<div class="product col md-12 py-4">
+							<div class="row align-items-center">
+								<div class="col-5">
+									<img src="images/user.png" width="80" height="80">
+								</div>
+								<div class="col-7">
+									<div>
+										<span>會員總人數</span>
+									</div>
+									<div>
+										<span th:text="${members + 1350}"></span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card col-md-3 mb-2 ml-auto">
+						<div class="product  col md-12 py-4">
+							<div class="row align-items-center">
+								<div class="col-5">
+									<img src="images/cart.png" width="80" height="80">
+								</div>
+								<div class="col-7">
+									<div>
+										<span>產品數量</span>
+									</div>
+									<div>
+										<span th:text="${products+products2+products3+products4+products5}"></span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="card col-md-3 mb-2 ml-auto">
+						<div class="product  col md-12 py-4">
+							<div class="row align-items-center">
+								<div class="col-5">
+									<img src="images/shopping.png" width="80" height="80">
+								</div>
+								<div class="col-7">
+									<div>
+										<span>訂單數量</span>
+									</div>
+									<div>
+										<span th:text="${orders+13425}"></span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+		<div class="col-md-12" style="margin-top:80px; margin-right:20px;">
+		<div class="row">
+		 <div id="main" style="width: 50%; height:400px; margin-left:85px; " class="col-md-5"></div>
+		 <div id="main2" style="width: 50%; height:400px; margin-left:46px;" class="col-md-5 "></div>
+		  </div>
+		  
+		 </div>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+        var data = [[${members + 80}]]
+        // 指定图表的配置项和数据
+        var option = {
+           
+        	backgroundColor: 'rgba(255,255,255,255)',
+        	color:['#87cefa','#70cc92','#ff7f50'],      
+            title: {
+                text: '     會員人數成長',
+                padding:[ 22 , 0  ,0 , 0]	
+            },
+            tooltip: {},
+            legend: {
+            	   data:['人數'],
+            	   padding:[ 22 , 0  ,0 , 0],
+            	   textStyle: {
+                       fontSize: 16,
+            	   }
+            	  
+            },
+            xAxis: {
+                data: ["4月","5月","6月","7月","8月","9月"]
+            },
+            yAxis: {},
+			
+      		lineStyle: {       // 属性lineStyle控制线条样式
+                color: '#48b',
+                width: 2,
+                type: 'solid'
+            },
+            grid: { 
+               top:'18%',
+               left: '4%',  
+               right: '5%',  
+               bottom: '10%',
+              
+               containLabel: true  
+            },
+           
+            series: [{
+                name: '人數',
+                type: 'line',
+				smooth: true,
+                data: [60, 70, 85, 80, 77, data]
+            }]
+        };
+ 
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
+    
+    <script  th:inline="javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main2'));
+ 		var data = [[${orders+200}]]
+        // 指定图表的配置项和数据
+        var option = {
+ 			backgroundColor: 'rgba(255,255,255,255)',	
+        	color:['#70cc92','#ff7f50','#87cefa'],
+            title: {
+                text: '     訂單數量成長',
+                padding:[ 22 , 0  ,0 , 0]
+            },
+            tooltip: {},
+            legend: {
+                data:['數量'],
+                padding:[ 22 , 0  ,0 , 0],
+                textStyle: {
+                    fontSize: 16,
+         	   }
+            },
+            xAxis: {
+                data: ["4月","5月","6月","7月","8月","9月"]
+            },
+            yAxis: {},
+			
+            bar: {
+            	itemStyle: {
+            	 normal: {
+            		  color: '#ff3200'
+            	 }
+            	}
+            },
+            
+            grid: { 
+                top:'18%',
+                left: '4%',  
+                right: '5%',  
+                bottom: '10%',
+               
+                containLabel: true  
+             },
+       
+            series: [{
+            	name: '數量',
+                type: 'bar',	
+                data: [200, 246, 285, 180, 267, data]
+            }]
+        };
+ 
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+    </script>
+	</div>
+	<!-- Bootstrap JS & jQuery -->
+	<script src="js/jquery-3.1.1.min.js"></script>
+	<script src="js/bootstrap.js"></script>
+	<!-- Popper.JS -->
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
+		integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
+		crossorigin="anonymous"></script>
+	<script type="text/javascript">
+		var dropdown = document.getElementsByClassName("dropdown-btn");
+		var i;
+
+		for (i = 0; i < dropdown.length; i++) {
+			dropdown[i].addEventListener("click", function() {
+				this.classList.toggle("active");
+				var dropdownContent = this.nextElementSibling;
+				if (dropdownContent.style.display === "block") {
+					dropdownContent.style.display = "none";
+				} else {
+					dropdownContent.style.display = "block";
+				}
+			});
+		}
+	</script>
+</body>
+</html>
